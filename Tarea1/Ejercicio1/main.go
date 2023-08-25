@@ -1,31 +1,35 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func figura(num int) {
-	asteriscos := 1
-	espacio := num / 2
+func contarTexto() {
+	text := "Haga un programa \n que cuente e indique el número \n de caracteres, el número de palabras \n y lineas"
 
-	for i := 0; i < num; i++ {
-		for j := 0; j < espacio; j++ {
-			fmt.Print(" ")
-		}
-		for j := 0; j < asteriscos; j++ {
-			fmt.Print("* ")
-		}
-		fmt.Println()
+	// Contadores para caracteres, palabras y líneas
+	caracteres := 0
+	palabras := 0
+	lineas := 0
 
-		if i < num/2 {
-			espacio--
-			asteriscos += 2
-		} else {
-			espacio++
-			asteriscos -= 2
-		}
+	// Dividir el texto en líneas
+	lineass := strings.Split(text, "\n")
+	lineas = len(lineass)
+
+	// Contar caracteres y palabras en cada línea
+	for _, linea := range lineass {
+		caracteres += len(linea)
+		palabra := strings.Fields(linea)
+		palabras += len(palabra)
 	}
+
+	// Imprimir los resultados
+	fmt.Printf("Número de caracteres: %d\n", caracteres)
+	fmt.Printf("Número de palabras: %d\n", palabras)
+	fmt.Printf("Número de líneas: %d\n", lineas)
 }
 
 func main() {
-	numElementos := 5 // Cantidad de elementos en la línea del centro (impar)
-	figura(numElementos)
+	contarTexto()
 }
