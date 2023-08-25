@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 type producto struct {
 	nombre   string
@@ -81,6 +84,30 @@ func (l *listaProductos) venderProducto(nombre string) {
 	}
 }
 
+func (l *listaProductos) aumentarInventarioDeMinimos(listaMinimos map[string]int) {
+	for nombre, minExistencia := range listaMinimos {
+		prod, err := l.buscarProducto(nombre)
+		if err == 0 && prod.cantidad < minExistencia {
+			(*prod).cantidad = minExistencia
+		}
+	}
+}
+
+func (l *listaProductos) ordenarPorNombre() {
+	sort.SliceStable(*l, func(i, j int) bool {
+		return (*l)[i].nombre < (*l)[j].nombre
+	})
+}
+func (l *listaProductos) listarProductosMinimos() listaProductos {
+	var productosMinimos listaProductos
+	for _, prod := range *l {
+		if prod.cantidad <= existenciaMinima {
+			productosMinimos = append(productosMinimos, prod)
+		}
+	}
+	return productosMinimos
+}
+
 //haga una función para a partir del nombre del producto, se pueda modificar el precio del mismo Pero utilizando la función buscarProducto MODIFICADA PREVIAMENTE
 
 func llenarDatos() {
@@ -100,9 +127,22 @@ func (l *listaProductos) listarProductosMínimos() listaProductos {
 
 func main() {
 	llenarDatos()
+	fmt.Println("Lista de productos:")
 	fmt.Println(lProductos)
-	//venda productos
-	//lProductos.venderProducto("arroz")
-	//lProductos.venderProducto("frijoles")
-	//fmt.Println("Lista actualizada: ", lProductos)
+
+	// a. Aumentar inventario de mínimos
+	listaMinimos := map[string]int{"arroz": 10, "frijoles": 10}
+	lProductos.aumentarInventarioDeMinimos(listaMinimos)
+	fmt.Println("Inventario aumentado para productos mínimos:")
+	fmt.Println(lProductos)
+
+	// b. Ordenar la lista de productos por nombre
+	lProductos.ordenarPorNombre()
+	fmt.Println("Lista de productos ordenada por nombre:")
+	fmt.Println(lProductos)
+
+	// Mostrar productos con existencia mínima
+	productosMinimos := lProductos.listarProductosMinimos()
+	fmt.Println("Productos con existencia mínima:")
+	fmt.Println(productosMinimos)
 }
