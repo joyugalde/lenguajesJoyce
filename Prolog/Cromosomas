@@ -1,0 +1,19 @@
+cromosoma_sujeto_candidato([], [], 100).
+cromosoma_sujeto_candidato([X|Sujeto], [X|Candidato], PorcentajeExactitud) :-
+    cromosoma_sujeto_candidato(Sujeto, Candidato, PorcentajeExactitudParcial),
+    PorcentajeExactitud is PorcentajeExactitudParcial.
+cromosoma_sujeto_candidato([_|Sujeto], [_|Candidato], PorcentajeExactitud) :-
+    cromosoma_sujeto_candidato(Sujeto, Candidato, PorcentajeExactitudParcial),
+    PorcentajeExactitud is PorcentajeExactitudParcial - 10.
+
+% Función para encontrar el sujeto más parecido a una muestra en una lista de personas
+sujeto_mas_parecido(_, [], _, none).
+sujeto_mas_parecido(Muestra, [Persona|RestoPersonas], PorcentajeMasParecido, SujetoMasParecido) :-
+    cromosoma_sujeto_candidato(Muestra, Persona, PorcentajeExactitud),
+    sujeto_mas_parecido(Muestra, RestoPersonas, PorcentajeMasParecidoResto, SujetoMasParecidoResto),
+    % Compara el porcentaje de exactitud para encontrar el más parecido
+    (PorcentajeExactitud >= PorcentajeMasParecidoResto ->
+        PorcentajeMasParecido is PorcentajeExactitud,
+        SujetoMasParecido = Persona
+    ; PorcentajeMasParecido is PorcentajeMasParecidoResto,
+        SujetoMasParecido = SujetoMasParecidoResto).
