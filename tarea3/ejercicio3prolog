@@ -1,0 +1,14 @@
+%3)	Defina la función aplanar(L,L2). Esta función recibe una lista con múltiples listas anidadas como elementos otra lista que contendría los mismos elementos de manera lineal (sin listas). aplanar([], []). % La lista vacía aplanada es una lista vacía.
+
+aplanar([X | Xs], [X | FlatXs]) :-
+    \+ is_list(X), % Si X no es una lista, mantenerlo en la lista aplanada.
+    aplanar(Xs, FlatXs).
+
+aplanar([X | Xs], Flat) :-
+    is_list(X), % Verificar si X es una lista.
+    aplanar(X, FlatX), % Aplanar la lista anidada X.
+    aplanar(Xs, FlatXs), % Continuar con el resto de la lista.
+    append(FlatX, FlatXs, Flat).
+
+is_list([]).
+is_list([_|_]).
