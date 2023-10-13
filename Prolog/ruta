@@ -1,0 +1,23 @@
+peso_conexion(i, a, 2).
+peso_conexion(i, b, 3).
+peso_conexion(a, b, 1).
+peso_conexion(a, c, 4).
+peso_conexion(b, f, 2).
+peso_conexion(b, c, 3).
+peso_conexion(c, f, 1).
+
+% Predicado para verificar si dos nodos están conectados
+conectados(X, Y) :- peso_conexion(X, Y, _).
+conectados(X, Y) :- peso_conexion(Y, X, _).
+
+% Predicado para encontrar la ruta más corta por peso
+ruta_mas_corta(Ini, Fin, Ruta) :-
+    ruta_mas_corta(Ini, Fin, [], 0, Ruta).
+
+ruta_mas_corta(Fin, Fin, [], Peso, [Fin], Peso).
+ruta_mas_corta(Ini, Fin, Visitados, Peso, [Ini | Resto], PesoTotal) :-
+    conectados(Ini, Alguien),
+    not(member(Alguien, Visitados)),
+    peso_conexion(Ini, Alguien, PesoConexion),
+    NuevoPeso is Peso + PesoConexion,
+    ruta_mas_corta(Alguien, Fin, [Ini | Visitados], NuevoPeso, Resto, PesoTotal).
