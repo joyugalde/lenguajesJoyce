@@ -1,0 +1,7 @@
+%1)Defina sumlist(L, S) que es verdadero si S es la suma de los elementos de L.
+
+sumlist([], 0).  % La suma de una lista vacía es 0.
+
+sumlist([Head | Tail], Sum) :-  % Caso general
+    sumlist(Tail, RestSum),     % Suma recursiva del resto de la lista
+    Sum is Head + RestSum.      % Suma del primer elemento y el resto
